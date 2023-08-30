@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule</title>
+</head>
+<body>
+<th:block th:fragment="headers">
+    <meta charset="UTF-8">
+    <title>Schedule</title>
+    <link rel="stylesheet" href="/common.css">
+</th:block>
+<div id="logo" th:fragment="logo">
+  <img src ="/logo.png">
+</div>
+<div id="menu" th:fragment="menu">
+    <a href="/main" class="button">Strona główna</a>
+    <a th:if="${logged}" href="/dayOff" class="button">Dodaj urlop</a>
+    <a th:if="${logged}" href="/logout" class="button">Wyloguj</a>
+</div>
+</body>
+</html>

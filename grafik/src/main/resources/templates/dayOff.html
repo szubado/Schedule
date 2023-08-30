@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{fragments.html :: headers}"></th:block>
+  <script src="/login-validator.js"></script>
+</head>
+<body>
+<div th:replace="~{fragments.html :: logo}"></div>
+<div th:replace="~{fragments.html :: menu}"></div>
+<div id="content">
+  <form th:action="dayOff" th:method="post" th:object="${dayOff}">
+    <label for="date">Wybierz dzień:</label>
+    <input type="date" th:field="*{date}" id="date" name="dayOff">
+    <input type="submit" value="Dodaj">
+  </form>
+</div>
+</body>
+</html>

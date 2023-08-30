@@ -1,0 +1,76 @@
+body {
+background-color: #FF6699;
+}
+
+#logo {
+width: 400px;
+height: 200px;
+margin: 15px auto;
+}
+
+#logo img {
+width: 400px;
+height: 200px;
+margin: 0;
+padding: 0;
+}
+
+#menu {
+display: flex;
+flex-direction: column;
+text-align: center;
+width: 17%;
+}
+
+#menu a {
+font-size: 15px;
+margin:5px 25px;
+text-decoration: none;
+border: 2px solid #9400d3;
+border-radius: 15px;
+padding: 5px 10px;
+color: black;
+transition: all 0.5s;
+background-color: #7fffd4
+}
+
+#menu a:hover {
+border: 2px solid #87cefa;
+color: black;
+background-color: #ba55d3;
+}
+
+#content {
+margin: 20px auto;
+width: 70%;
+text-align: center;
+}
+.menuTitle {
+font-weight: bold;
+font-size: 30px;
+color: #cc33ff;
+margin: 0 0 10px 0;
+}
+
+#menu .add {
+font-size: 15px;
+margin:5px 25px;
+text-decoration: none;
+padding: 5px 10px;
+color: black;
+transition: all 0.5s;
+background-color: #80ffff;
+border: 2px solid #1affff;
+}
+
+#menu .add:hover {
+border: 2px solid #00ace6;
+color: black;
+background-color: #4dd2ff;
+}
+
+
+
+
+
+
