@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface UserDAO extends CrudRepository<User, Integer> {
-Optional<User> findByLogin(String login);
-}
+    Optional<User> findByLogin(String login);
+    }

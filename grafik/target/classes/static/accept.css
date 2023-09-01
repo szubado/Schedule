@@ -1,0 +1,40 @@
+body {
+    background-color: #ffb405;
+    text-decoration: none;
+}
+.accept {
+    height: 20px;
+    margin: 10px;
+    background-color: #b380ff;
+    transition: all 0.5s;
+}
+.accept:hover {
+    background-color: #8b008b;
+}
+
+.accept .user, .accept .date {
+    display: inline-block;
+    font-size: 16px;
+    text-align: left;
+}
+.accept .edit {
+    display: inline-block;
+    border-radius: 5px;
+    text-align: right;
+    font-size: 16px;
+    text-decoration: none;
+    border: 1px solid #944dff;
+    background-color: #00fa9a;
+    color: black;
+}
+
+.accept .edit:hover {
+border: 2px solid #5200cc;
+color: black;
+background-color: #6600ff;
+}
+
+.accept .theme {
+text-align: center;
+font-size: 22px;
+}

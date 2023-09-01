@@ -12,21 +12,10 @@ import lombok.*;
 @Entity(name = "tday")
 public class Day {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int month;
-    private int dayOfMonth;
-    private int year;
-
     @ManyToOne(fetch = FetchType.EAGER)
-    private User dutyUser1;
+    private User user1;
     @ManyToOne(fetch = FetchType.EAGER)
-    private User dutyUser2;
-    @Enumerated(EnumType.STRING)
-    private TypeOfDay typeOfDay;
-    public enum TypeOfDay {
-        WEEKDAY,
-        SATURDAY,
-        HOLIDAY
-    }
+    private User user2;
+    private boolean holiday;
 }

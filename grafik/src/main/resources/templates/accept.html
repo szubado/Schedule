@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{fragments.html :: headers}"></th:block>
+</head>
+<body>
+<link rel="stylesheet" href="/accept.css">
+<div th:replace="~{fragments.html :: logo}"></div>
+<div th:replace="~{fragments.html :: menu}"></div>
+<div id="content">
+  <div class="theme">Urlopy do zaakceptowania:</div>
+  <div th:each="accept : ${toAccept}" class="accept">
+    <div th:text="${accept.user.name}" class="user"></div>
+    <div th:text="${accept.user.surname}" class="user"></div>
+    <div th:text="${accept.date}" class="date"></div>
+    <a th:if="${admin}" th:href="@{/accept/approve/{id}(id=${accept.id})}" class="edit">Akceptuj</a>
+    <a th:if="${admin}" th:href="@{/accept/discard/{id}(id=${accept.id})}" class="edit">Odrzuć</a>
+  </div>
+</div>
+</body>
+</html>

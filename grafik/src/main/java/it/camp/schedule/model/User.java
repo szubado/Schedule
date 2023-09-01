@@ -19,13 +19,13 @@ public class User {
     private String name;
     private String surname;
     @Enumerated(EnumType.STRING)
-    private Lab lab;
-    @Enumerated(EnumType.STRING)
     private Role role;
     public enum Role {
         ADMIN,
         USER
     }
+    @Enumerated(EnumType.STRING)
+    private Lab lab;
     public enum Lab {
         HEMATOLOGY,
         ANALYTICS,

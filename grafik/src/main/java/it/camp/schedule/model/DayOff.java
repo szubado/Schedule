@@ -21,10 +21,7 @@ public class DayOff {
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
     private int dayOfYear;
-/*    @ManyToOne(fetch = FetchType.EAGER)
-    private Day day;*/
-/*
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-*/
+    private boolean approved;
     private LocalDate date;
+
 }

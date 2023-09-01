@@ -16,6 +16,8 @@
 <div id="menu" th:fragment="menu">
     <a href="/main" class="button">Strona główna</a>
     <a th:if="${logged}" href="/dayOff" class="button">Dodaj urlop</a>
+    <a th:if="${admin}" href="/accept" class="button">Akceptuj urlopy</a>
+    <a th:if="${logged}" href="/schedule" class="button">Grafik</a>
     <a th:if="${logged}" href="/logout" class="button">Wyloguj</a>
 </div>
 </body>
