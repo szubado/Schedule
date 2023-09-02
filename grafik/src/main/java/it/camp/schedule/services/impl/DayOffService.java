@@ -16,7 +16,6 @@ public class DayOffService implements IDayOffService {
 
     @Override
     public List<DayOff> toAccept() {
-        System.out.println(dayOffDAO.findByApproved(false));
         return dayOffDAO.findByApproved(false);
     }
 

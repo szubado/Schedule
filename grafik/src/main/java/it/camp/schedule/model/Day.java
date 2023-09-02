@@ -3,6 +3,8 @@ package it.camp.schedule.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -18,4 +20,5 @@ public class Day {
     @ManyToOne(fetch = FetchType.EAGER)
     private User user2;
     private boolean holiday;
+    private LocalDate date;
 }
