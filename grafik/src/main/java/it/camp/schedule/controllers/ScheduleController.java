@@ -33,10 +33,7 @@ public class ScheduleController {
         if (!this.sessionData.isAdmin()) {
             return "redirect:/main";
         }
-        this.dayService.calculate(month);
-/*        System.out.println(this.dayService.calculate(month));*/
-/*        System.out.println(this.dayService.lastDayFilled(month));*/
-        /*System.out.println(this.dayService.findByMonth(month));*/
+        this.dayService.calculate(Integer.parseInt(month.substring(month.length() -2)));
         ModelUtils.addCommonDataToModel(model, this.sessionData);
         return "schedule";
     }
