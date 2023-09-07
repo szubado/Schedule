@@ -11,6 +11,10 @@ import lombok.*;
 @EqualsAndHashCode
 @Entity(name = "tuser")
 public class User {
+    public User(int id) {
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

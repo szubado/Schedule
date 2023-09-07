@@ -5,5 +5,7 @@ import it.camp.schedule.model.Day;
 import java.util.List;
 
 public interface IDayService {
-    public List<Day> findByMonth(int month);
+    public List<Day> findByMonth(String month);
+    public int lastDayFilled(String month);
+    public void calculate(String month);
 }
