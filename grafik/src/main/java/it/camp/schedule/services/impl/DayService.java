@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class DayService implements IDayService {
@@ -34,6 +31,13 @@ public class DayService implements IDayService {
 
     @Override
     public int lastDayFilled(final int month) {
+/*        List<Day> nowe = new ArrayList<>();
+        for (Day day : findByMonth(month)) {
+            if(day.getUser1() != null) {
+                nowe.add(day);
+            }
+        }
+        return nowe.size();*/
         Optional<Day> toFill = findByMonth(month).stream().filter(d -> d.getUser1() != null)
                 .max(Comparator.comparingInt(d -> d.getUser1().getId()));
         return toFill.map(Day::getId).orElse(0);
@@ -41,12 +45,12 @@ public class DayService implements IDayService {
 
     @Override
     public void calculate(int month) {
-        int daysInMonth = findByMonth(month).size();
         int numberOfEmployees = (int) this.userDAO.count();
         int day = lastDayFilled(month) + 1;
         Random random = new Random();
+        int statement = (numberOfEmployees * (((findByMonth(month).size() - lastDayFilled(month)) / numberOfEmployees) + 1));
         // lub -> przpadek grudniowy do kiedy ma sie krecic petla
-        while (day != (numberOfEmployees * (((daysInMonth - lastDayFilled(month)) / numberOfEmployees) + 1))) {
+        while (day <= statement) {
             int randomEmployeeId = random.nextInt(1, numberOfEmployees + 1);
             User.Lab employeeLab = this.userDAO.findById(randomEmployeeId).get().getLab();
             if (this.dayDAO.findById(day - 1).get().getUser1().getId() !=
@@ -58,9 +62,6 @@ public class DayService implements IDayService {
                         Optional<Day> dayBox = this.dayDAO.findById(day);
                         dayBox.get().setUser1(new User (randomEmployeeId, employeeLab));
                         saveDay(dayBox.get());
-                       /* this.dayDAO.findById(day).get().setUser1(new User (randomEmployeeId, employeeLab));
-              *//*          this.dayDAO.findById(day).get().getUser1().setLab(employeeLab);*//*
-                        saveDay(this.dayDAO.findById(day).get());*/
                     } else {
                         if (!this.dayDAO.findById(day).get().getUser1().getLab().equals(employeeLab)) {
                             Optional<Day> dayBox = this.dayDAO.findById(day);
@@ -70,27 +71,11 @@ public class DayService implements IDayService {
                         } continue;
                     }
                 } continue;
-            } else break;
+            } continue;
         }
     }
 
     public void saveDay(Day day) {
         this.dayDAO.save(day);
     }
-/*    @Override
-    public void calculate(List<Day> days) {
-        int monthLength = days.size();
-        int numberOfUsers = (int) this.userDAO.count();
-        List<Day> holidays = this.dayDAO.findByHoliday(true);
-        int sundaysInHolidas = holidays.stream().filter(d -> d.getDate().getDayOfWeek().equals(DayOfWeek.SUNDAY)).toList().size();
-        int saturdaysInHolidays = holidays.stream().filter(d -> d.getDate().getDayOfWeek().equals(DayOfWeek.SATURDAY)).toList().size();
-        int weekdaysInHolidays = holidays.size() - sundaysInHolidas - saturdaysInHolidays;
-        days.stream()
-        for (Day day : days) {
-            if (day.getDate().getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
-                saturday++;
-            }
-            if ()
-        }
-    }*/
 }
