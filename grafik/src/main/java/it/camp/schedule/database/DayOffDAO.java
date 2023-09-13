@@ -6,11 +6,13 @@ import it.camp.schedule.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 @Repository
 public interface DayOffDAO extends CrudRepository<DayOff,Integer> {
     List<DayOff> findByApproved(boolean approved);
+    Optional<DayOff> findByDayOfYear(int dayOfYear);
     List<DayOff> findByDayOfYearAndUser(int dayOfYear, User user);
 
 
