@@ -28,6 +28,14 @@ public class DayService implements IDayService {
     }
 
     @Override
+    public List<Day> findTwoClosestMonths(int month) {
+        List<Day> days = (List<Day>) this.dayDAO.findAll();
+        return days.stream().filter(d -> d.getDate().getMonthValue() == month ||
+                d.getDate().getMonthValue() == month + 1).toList();
+    }
+
+
+    @Override
     public int lastDayFilled(final int month) {
         List<Day> nowe = new ArrayList<>();
         for (Day day : findByMonth(month)) {
@@ -48,8 +56,13 @@ public class DayService implements IDayService {
     }
 
     public int findNbOfDayInYear(int month, int day) {
-        return findByMonth(month).get(day - 1).getId();
+        if (day == 0) {
+            return findTwoClosestMonths(month).get(day).getId() - 1;
+        } else {
+            return findTwoClosestMonths(month).get(day - 1).getId();
+        }
     }
+
     /* @Override
      public void calculate(int month) {
          int numberOfEmployees = (int) this.userDAO.count();
@@ -91,8 +104,9 @@ public class DayService implements IDayService {
         List<User> users = (List<User>) this.userDAO.findAll();
         int statement = (numberOfEmployees * (((numberOfDays - lastDayFilled(month)) / numberOfEmployees) + 1));
         // lub -> przpadek grudniowy do kiedy ma sie krecic petla
+        outerloop:
         while (day <= statement) {
-            int previousDay = day - 1;
+            final int previousDay = findNbOfDayInYear(month, day - 1);
             List<User> availableUsers = users.stream().filter(u -> u.getId() !=
                     this.dayDAO.findById(previousDay).get().getUser1().getId() &&
                     u.getId() != this.dayDAO.findById(previousDay).get().getUser2().getId()).toList();
@@ -101,37 +115,46 @@ public class DayService implements IDayService {
                 availableUsers = availableUsers.stream().filter(u -> u.getId() !=
                         this.dayOffDAO.findByDayOfYear(previousDay + 1).get().getUser().getId()).toList();
             }
-            int counter = 0;
-            outerloop:
-            while (this.dayDAO.findById(day).get().getUser2() == null) {
+            int counter1 = 0;
+            int counter2 = 0;
+            innerloop:
+            while (this.dayDAO.findById(previousDay + 1).get().getUser2() == null) {
                 int randomUser1 = availableUsers.get(random.nextInt(availableUsers.size())).getId();
                 User.Lab employee1Lab = this.userDAO.findById(randomUser1).get().getLab();
                 if (countNumberOfDuties(month, new User(randomUser1), new User(randomUser1)) < maxDuties) {
-                    Optional<Day> dayBox = this.dayDAO.findById(day);
+                    Optional<Day> dayBox = this.dayDAO.findById(previousDay + 1);
                     dayBox.get().setUser1(new User(randomUser1, employee1Lab));
                     availableUsers = availableUsers.stream().filter(u -> !u.getLab().equals(employee1Lab)).toList();
                 } else {
                     //opis wyjscia
                     //couter ile razy weszlismy tutaj jesli przekroczy 2xrozmiar tablicy users (wyselekcjonowanej)
-                    counter++;
-                    if (counter > numberOfEmployees * 2) {
+                    counter1++;
+                    if (counter1 > numberOfEmployees * 2) {
                         break;
                     }
                     continue;
                 }
-                while (this.dayDAO.findById(day).get().getUser2() == null) {
+                while (this.dayDAO.findById(previousDay + 1).get().getUser2() == null) {
                     int randomUser2 = availableUsers.get(random.nextInt(availableUsers.size())).getId();
                     if (countNumberOfDuties(month, new User(randomUser2), new User(randomUser2)) < maxDuties) {
-                        Optional<Day> dayBox = this.dayDAO.findById(day);
+                        Optional<Day> dayBox = this.dayDAO.findById(previousDay + 1);
                         dayBox.get().setUser2(new User(randomUser2, this.userDAO.findById(randomUser2).get().getLab()));
                         saveDay(dayBox.get());
                         day++;
-                        break outerloop;
+                        break innerloop;
+                    } else {
+                        //opis wyjscia
+                        //couter ile razy weszlismy tutaj jesli przekroczy 2xrozmiar tablicy users (wyselekcjonowanej)
+                        counter1++;
+                        if (counter1 > numberOfEmployees * 2) {
+                            break outerloop;
+                        }
                     }
                 }
             }
         }
     }
+
 
     public void saveDay(Day day) {
         this.dayDAO.save(day);
