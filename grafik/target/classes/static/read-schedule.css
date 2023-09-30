@@ -1,0 +1,18 @@
+body {
+    background-color: #48D1CC;
+}
+.box{
+padding: 15px;
+display: inline-grid !important;
+grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
+}
+
+.box >div {
+grid-template-rows: 120px;
+border: 1px solid black;
+text-align: center;
+font-size: 15px;
+color: white;
+background-color: #7B68EE;
+justify-content: space-evenly;
+}

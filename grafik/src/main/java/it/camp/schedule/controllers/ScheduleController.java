@@ -1,5 +1,6 @@
 package it.camp.schedule.controllers;
 
+import it.camp.schedule.database.DayDAO;
 import it.camp.schedule.services.IDayOffService;
 import it.camp.schedule.services.IDayService;
 import it.camp.schedule.session.SessionData;
@@ -19,9 +20,12 @@ public class ScheduleController {
     @Autowired
     IDayService dayService;
 
+    @Autowired
+    DayDAO dayDAO;
+
     @RequestMapping(path = "/schedule", method = RequestMethod.GET)
     public String create(Model model) {
-        if (!this.sessionData.isLogged()) {
+        if (!this.sessionData.isAdmin()) {
             return "redirect:/main";
         }
         ModelUtils.addCommonDataToModel(model, this.sessionData);
@@ -30,17 +34,33 @@ public class ScheduleController {
 
     @RequestMapping(path = "/schedule", method = RequestMethod.POST)
     public String calculate(@RequestParam String month, Model model) {
+        //blokada na guzikach w html
         if (!this.sessionData.isAdmin()) {
             return "redirect:/main";
         }
-/*
-        System.out.println("wszystkie w mies " + this.dayService.findByMonth(Integer.parseInt(month.substring(month.length() -2))));
-*/
-/*
-        System.out.println(" lastdayfilled " + this.dayService.lastDayFilled(Integer.parseInt(month.substring(month.length() -2))));
-*/
+        // jesli nie approved dyzury to redrect na approve
+        //jesli poprzedni mies nie jest approved to return schedule
         this.dayService.calculate(Integer.parseInt(month.substring(month.length() -2)));
         ModelUtils.addCommonDataToModel(model, this.sessionData);
         return "schedule";
+    }
+
+    @RequestMapping(path = "/schedule/read", method = RequestMethod.GET)
+    public String read(Model model) {
+        if (!this.sessionData.isLogged()) {
+            return "redirect:/main";
+        }
+        ModelUtils.addCommonDataToModel(model, this.sessionData);
+        return "read-schedule";
+    }
+
+    @RequestMapping(path = "/schedule/read", method = RequestMethod.POST)
+    public String show(@RequestParam String month, Model model) {
+        if (!this.sessionData.isLogged()) {
+            return "redirect:/main";
+        }
+        model.addAttribute("days", this.dayService.findByMonth(Integer.parseInt(month.substring(month.length() -2))));
+        ModelUtils.addCommonDataToModel(model, this.sessionData);
+        return "read-schedule";
     }
 }

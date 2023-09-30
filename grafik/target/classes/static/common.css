@@ -31,7 +31,7 @@ border-radius: 15px;
 padding: 5px 10px;
 color: black;
 transition: all 0.5s;
-background-color: #7fffd4
+background-color: #7fffd4;
 }
 
 #menu a:hover {
@@ -41,6 +41,7 @@ background-color: #ba55d3;
 }
 
 #content {
+display: inline;
 margin: 20px auto;
 width: 70%;
 text-align: center;

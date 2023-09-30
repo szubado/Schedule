@@ -8,10 +8,10 @@
 <div th:replace="~{fragments.html :: logo}"></div>
 <div th:replace="~{fragments.html :: menu}"></div>
 <div id="content">
-    <form th:action="schedule" th:method="post"><!-- th:object="${dayOff}"-->
+    <form th:action="schedule" th:method="post">
         <label for="month">Wybierz miesiąc:</label>
         <input type="month" id="month" name="month" min="2024-01" max="2024-12" value="2024-01" >
-        <input type="submit" value="Przelicz" class="count">
+        <input th:if="${admin}" type="submit" value="Przelicz" class="count">
     </form>
 </div>
 </body>

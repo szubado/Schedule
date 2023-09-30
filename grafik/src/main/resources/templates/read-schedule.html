@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments.html :: headers}"></th:block>
+</head>
+<body>
+<link rel="stylesheet" href="/read-schedule.css">
+<div th:replace="~{fragments.html :: logo}"></div>
+<div th:replace="~{fragments.html :: menu}"></div>
+<div id="content">
+    <form th:action="read" th:method="post">
+        <label for="month">Wybierz miesiąc:</label>
+        <input type="month" id="month" name="month" min="2024-01" max="2024-12" value="2024-01" >
+        <input th:if="${logged}" type="submit" value="Wyświetl" class="count">
+    </form>
+    <div class="box">
+        <div th:each="day : ${days}" class="day">
+            <div class="innerbox">
+                <input th:if="${admin}" type="submit" value="Zmień" class="count">
+                <div th:text="${day.date}" class="person"></div>
+                <div th:text="${day.user1.name} + ' ' + ${day.user1.surname}" class="person"></div>
+                <div th:text="${day.user2.name} + ' ' + ${day.user2.surname}" class="person"></div>
+            </div>
+<!--        <div th:text="${day.user1.name} + ' ' + {day.user1.surname}" class="person"></div>
+        <div th:text="${day.user2.name} + ' ' + {day.user2.surname}" class="person"></div>-->
+        </div>
+    </div>
+</div>
+</body>
+</html>

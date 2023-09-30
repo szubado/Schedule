@@ -34,7 +34,6 @@ public class DayService implements IDayService {
                 d.getDate().getMonthValue() == month + 1).toList();
     }
 
-
     @Override
     public int lastDayFilled(final int month) {
         List<Day> nowe = new ArrayList<>();
@@ -44,9 +43,6 @@ public class DayService implements IDayService {
             }
         }
         return nowe.size();
-/*        Optional<Day> toFill = findByMonth(month).stream().filter(d -> d.getUser1() != null)
-                .max(Comparator.comparingInt(d -> d.getUser1().getId()));
-        return toFill.map(Day::getId).orElse(0);*/
     }
 
     public int countNumberOfDuties(int month, User user1, User user2) {
@@ -63,37 +59,6 @@ public class DayService implements IDayService {
         }
     }
 
-    /* @Override
-     public void calculate(int month) {
-         int numberOfEmployees = (int) this.userDAO.count();
-         int day = lastDayFilled(month) + 1;
-         Random random = new Random();
-         int statement = (numberOfEmployees * (((findByMonth(month).size() - lastDayFilled(month)) / numberOfEmployees) + 1));
-         // lub -> przpadek grudniowy do kiedy ma sie krecic petla
-         while (day <= statement) {
-             int randomEmployeeId = random.nextInt(1, numberOfEmployees + 1);
-             User.Lab employeeLab = this.userDAO.findById(randomEmployeeId).get().getLab();
-             if (this.dayDAO.findById(day - 1).get().getUser1().getId() !=
-                     this.userDAO.findById(randomEmployeeId).get().getId() &&
-                     this.dayDAO.findById(day - 1).get().getUser2().getId() !=
-                             this.userDAO.findById(randomEmployeeId).get().getId()) {
-                 if (this.dayOffDAO.findByDayOfYearAndUser(day, new User(randomEmployeeId)).isEmpty()) {
-                     if (this.dayDAO.findById(day).get().getUser1() == null) {
-                         Optional<Day> dayBox = this.dayDAO.findById(day);
-                         dayBox.get().setUser1(new User (randomEmployeeId, employeeLab));
-                         saveDay(dayBox.get());
-                     } else {
-                         if (!this.dayDAO.findById(day).get().getUser1().getLab().equals(employeeLab)) {
-                             Optional<Day> dayBox = this.dayDAO.findById(day);
-                             dayBox.get().setUser2(new User (randomEmployeeId, employeeLab));
-                             saveDay(dayBox.get());
-                             day++;
-                         }
-                     }
-                 }
-             }
-         }
-     }*/
     @Override
     public void calculate(int month) {
         int numberOfEmployees = (int) this.userDAO.count();
@@ -143,10 +108,8 @@ public class DayService implements IDayService {
                         day++;
                         break innerloop;
                     } else {
-                        //opis wyjscia
-                        //couter ile razy weszlismy tutaj jesli przekroczy 2xrozmiar tablicy users (wyselekcjonowanej)
-                        counter1++;
-                        if (counter1 > numberOfEmployees * 2) {
+                        counter2++;
+                        if (counter2 > numberOfEmployees * 2) {
                             break outerloop;
                         }
                     }
@@ -155,8 +118,8 @@ public class DayService implements IDayService {
         }
     }
 
-
     public void saveDay(Day day) {
         this.dayDAO.save(day);
     }
+
 }
