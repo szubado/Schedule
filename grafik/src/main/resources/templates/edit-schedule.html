@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments.html :: headers}"></th:block>
+</head>
+<body>
+<link rel="stylesheet" href="/schedule.css">
+<div th:replace="~{fragments.html :: logo}"></div>
+<div th:replace="~{fragments.html :: menu}"></div>
+<div id="content">
+    <form th:action="edit" th:method="post" th:object="${day}">
+        <label for="date">Wybierz dzień:</label>
+        <input type="date" th:field="*{date}" id="date" name="day" min="2024-01-01" max="2024-12-31">
+        <select class="select" th:field="*{user1}">
+            <option value="0">Wybierz pracownika</option>
+            <option th:each="user : ${users}" th:value="${user.id}"
+                    th:text="${user.name} + ' ' + ${user.surname}"></option>
+        </select>
+        <select class="select" th:field="*{user2}">
+            <option value="0">Wybierz pracownika</option>
+            <option th:each="user : ${users}" th:value="${user.id}"
+                    th:text="${user.name} + ' ' + ${user.surname}"></option>
+        </select>
+        <input type="submit" value="Dodaj">
+    </form>
+</div>
+</body>
+</html>

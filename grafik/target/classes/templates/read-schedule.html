@@ -16,7 +16,6 @@
     <div class="box">
         <div th:each="day : ${days}" class="day">
             <div class="innerbox">
-                <input th:if="${admin}" type="submit" value="Zmień" class="count">
                 <div th:text="${day.date}" class="person"></div>
                 <div th:text="${day.user1.name} + ' ' + ${day.user1.surname}" class="person"></div>
                 <div th:text="${day.user2.name} + ' ' + ${day.user2.surname}" class="person"></div>

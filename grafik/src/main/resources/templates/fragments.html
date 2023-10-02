@@ -17,8 +17,9 @@
     <a href="/main" class="button">Strona główna</a>
     <a th:if="${logged}" href="/dayOff" class="button">Dodaj urlop</a>
     <a th:if="${admin}" href="/accept" class="button">Akceptuj urlopy</a>
-    <a th:if="${logged}" href="/schedule/read" class="button">Wyświetl Grafik</a>
     <a th:if="${admin}" href="/schedule" class="button">Zaplanuj Grafik</a>
+    <a th:if="${logged}" href="/schedule/read" class="button">Wyświetl Grafik</a>
+    <a th:if="${admin}" href="/schedule/edit" class="button">Edytuj Grafik</a>
     <a th:if="${logged}" href="/logout" class="button">Wyloguj</a>
 </div>
 </body>

@@ -9,4 +9,5 @@ public interface IDayService {
     public List<Day> findTwoClosestMonths(int month);
     public int lastDayFilled(int month);
     public void calculate(int month);
+    public void saveDay(Day day);
 }

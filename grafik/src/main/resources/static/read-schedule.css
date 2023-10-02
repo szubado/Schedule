@@ -4,15 +4,21 @@ body {
 .box{
 padding: 15px;
 display: inline-grid !important;
-grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
+grid-template-columns: 120px 120px 120px 120px 120px 120px 120px;
 }
 
 .box >div {
-grid-template-rows: 120px;
+grid-template-rows: 140px;
 border: 1px solid black;
 text-align: center;
 font-size: 15px;
 color: white;
 background-color: #7B68EE;
 justify-content: space-evenly;
+padding: 15px;
 }
+
+.day >div {
+padding: 5px;
+}
+
