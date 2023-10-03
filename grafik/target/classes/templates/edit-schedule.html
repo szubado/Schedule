@@ -5,21 +5,23 @@
 </head>
 <body>
 <link rel="stylesheet" href="/schedule.css">
+<script src="/edit-schedule.js"></script>
 <div th:replace="~{fragments.html :: logo}"></div>
 <div th:replace="~{fragments.html :: menu}"></div>
 <div id="content">
-    <form th:action="edit" th:method="post" th:object="${day}">
+    <form th:action="edit" th:method="post" th:object="${day}" onsubmit="return validate()">
+        <div id="info"></div>
         <label for="date">Wybierz dzień:</label>
         <input type="date" th:field="*{date}" id="date" name="day" min="2024-01-01" max="2024-12-31">
-        <select class="select" th:field="*{user1}">
+        <select class="select" th:field="*{user1}" id="user1">
             <option value="0">Wybierz pracownika</option>
             <option th:each="user : ${users}" th:value="${user.id}"
-                    th:text="${user.name} + ' ' + ${user.surname}"></option>
+                    th:text="${user.name} + ' ' + ${user.surname} + ' ' + ${user.lab}"></option>
         </select>
-        <select class="select" th:field="*{user2}">
+        <select class="select" th:field="*{user2}" id="user2">
             <option value="0">Wybierz pracownika</option>
             <option th:each="user : ${users}" th:value="${user.id}"
-                    th:text="${user.name} + ' ' + ${user.surname}"></option>
+                    th:text="${user.name} + ' ' + ${user.surname} + ' ' + ${user.lab}"></option>
         </select>
         <input type="submit" value="Dodaj">
     </form>

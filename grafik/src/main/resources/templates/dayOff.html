@@ -9,7 +9,7 @@
 <div id="content">
   <form th:action="dayOff" th:method="post" th:object="${dayOff}">
     <label for="date">Wybierz dzień:</label>
-    <input type="date" th:field="*{date}" id="date" name="dayOff">
+    <input type="date" th:field="*{date}" id="date" name="dayOff" min="2024-01-01" max="2024-12-31">
     <input type="submit" value="Dodaj">
   </form>
 </div>

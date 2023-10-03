@@ -28,6 +28,26 @@ public class DayService implements IDayService {
     }
 
     @Override
+    public boolean checkIfFilled(int month) {
+        boolean result = true;
+        for (Day day : findByMonth(month)) {
+            if (day.getUser1() == null || day.getUser2() == null) {
+                result = false;
+                break;
+            }
+        }
+         return result;
+    }
+
+    @Override
+    public void acceptDuties(int month) {
+        for (Day day : findByMonth(month)) {
+            day.setApproved(true);
+            saveDay(day);
+        }
+    }
+
+    @Override
     public List<Day> findTwoClosestMonths(int month) {
         List<Day> days = (List<Day>) this.dayDAO.findAll();
         return days.stream().filter(d -> d.getDate().getMonthValue() == month ||
@@ -36,13 +56,13 @@ public class DayService implements IDayService {
 
     @Override
     public int lastDayFilled(final int month) {
-        List<Day> nowe = new ArrayList<>();
+        List<Day> days = new ArrayList<>();
         for (Day day : findByMonth(month)) {
             if (day.getUser1() != null) {
-                nowe.add(day);
+                days.add(day);
             }
         }
-        return nowe.size();
+        return days.size();
     }
 
     public int countNumberOfDuties(int month, User user1, User user2) {

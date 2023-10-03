@@ -19,6 +19,6 @@ public class Day {
     private User user1;
     @ManyToOne(fetch = FetchType.EAGER)
     private User user2;
-    private boolean holiday;
+    private boolean approved;
     private LocalDate date;
 }

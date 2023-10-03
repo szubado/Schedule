@@ -13,12 +13,15 @@
         <input type="month" id="month" name="month" min="2024-01" max="2024-12" value="2024-01" >
         <input th:if="${logged}" type="submit" value="Wyświetl" class="count">
     </form>
+    <a th:if="${admin}" th:href="@{/schedule/approve/{id}(id=${month})}" class="count">Akceptuj dyżury</a>
     <div class="box">
         <div th:each="day : ${days}" class="day">
             <div class="innerbox">
                 <div th:text="${day.date}" class="person"></div>
-                <div th:text="${day.user1.name} + ' ' + ${day.user1.surname}" class="person"></div>
-                <div th:text="${day.user2.name} + ' ' + ${day.user2.surname}" class="person"></div>
+                <div th:text="${day.user1.name != null} ? ${day.user1.name} : 'dupa'"></div>
+<!--                <div th:text="${day.user1.surname} ?: 'dupa'"></div>
+                <div th:text="${day.user2.name} ?: 'dupa'"></div>
+                <div th:text="${day.user2.surname} ?: 'dupa'"></div>-->
             </div>
 <!--        <div th:text="${day.user1.name} + ' ' + {day.user1.surname}" class="person"></div>
         <div th:text="${day.user2.name} + ' ' + {day.user2.surname}" class="person"></div>-->

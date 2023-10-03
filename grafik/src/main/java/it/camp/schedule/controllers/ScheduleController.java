@@ -1,21 +1,21 @@
 package it.camp.schedule.controllers;
 
 import it.camp.schedule.database.DayDAO;
+import it.camp.schedule.exceptions.LabValidationException;
+import it.camp.schedule.exceptions.LoginAlreadyExistsException;
 import it.camp.schedule.model.Day;
 import it.camp.schedule.model.DayOff;
 import it.camp.schedule.model.User;
 import it.camp.schedule.services.IDayService;
 import it.camp.schedule.services.impl.UserService;
 import it.camp.schedule.session.SessionData;
+import it.camp.schedule.validators.UserValidator;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.exceptions.TemplateProcessingException;
 
 import java.util.Optional;
@@ -43,7 +43,6 @@ public class ScheduleController {
 
     @RequestMapping(path = "/schedule", method = RequestMethod.POST)
     public String calculate(@RequestParam String month, Model model) {
-        //blokada na guzikach w html
         if (!this.sessionData.isAdmin()) {
             return "redirect:/main";
         }
@@ -69,7 +68,8 @@ public class ScheduleController {
             return "redirect:/main";
         }
             model.addAttribute("days", this.dayService.findByMonth(Integer.parseInt(month.substring(month.length() - 2))));
-            ModelUtils.addCommonDataToModel(model, this.sessionData);
+            model.addAttribute("month", (Integer.parseInt(month.substring(month.length() - 2))));
+        ModelUtils.addCommonDataToModel(model, this.sessionData);
         return "read-schedule";
     }
 
@@ -90,11 +90,28 @@ public class ScheduleController {
         if (!this.sessionData.isAdmin()) {
             return "redirect:/main";
         }
-        dayBox.get().setUser1(day.getUser1());
-        dayBox.get().setUser2(day.getUser2());
-        this.dayService.saveDay(dayBox.get());
+        try {
+            UserValidator.validateLabEquality(day.getUser1().getLab(), day.getUser2().getLab());
+            dayBox.get().setUser1(day.getUser1());
+            dayBox.get().setUser2(day.getUser2());
+            this.dayService.saveDay(dayBox.get());
+        } catch (LabValidationException e) {
+            return "redirect:/schedule/edit";
+        }
         ModelUtils.addCommonDataToModel(model, this.sessionData);
         model.addAttribute("users",this.userService.findAllUsers());
         return "edit-schedule";
+    }
+
+    @RequestMapping(path = "/schedule/approve/{id}", method = RequestMethod.GET)
+    public String acceptDuties(@PathVariable int id) {
+        if(!this.sessionData.isAdmin()) {
+            return "redirect:/main";
+        }
+        if (!this.dayService.checkIfFilled(id)) {
+            return "redirect:/schedule/edit";
+        }
+        this.dayService.acceptDuties(id);
+        return "redirect:/schedule/read";
     }
 }

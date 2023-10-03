@@ -36,9 +36,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Lab lab;
     public enum Lab {
-        HEMATOLOGY,
-        ANALYTICS,
-        BIOCHEMISTRY,
-        IMMUNOCHEMISTRY
+        HEMATOLOGIA,
+        ANALITYKA,
+        BIOCHEMIA,
+        IMMUNOCHEMIA
     }
 }

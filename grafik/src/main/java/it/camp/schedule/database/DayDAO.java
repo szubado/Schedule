@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 @Repository
 public interface DayDAO extends CrudRepository<Day,Integer> {
-    List<Day> findByHoliday(boolean holiday);
+
     Integer countByDate(LocalDate date);
     Integer countByUser1OrUser2(User user1, User user2);
     List<Day> findByUser1OrUser2(User user1, User user2);

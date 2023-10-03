@@ -1,5 +1,6 @@
 package it.camp.schedule.validators;
 
+import it.camp.schedule.exceptions.LabValidationException;
 import it.camp.schedule.exceptions.UserValidationException;
 import it.camp.schedule.model.User;
 
@@ -47,5 +48,11 @@ public class UserValidator {
         validateSurname(user.getSurname());
         validateLogin(user.getLogin());
         validatePassword(user.getPassword());
+    }
+
+    public static void validateLabEquality(User.Lab lab1, User.Lab lab2) {
+        if(lab1.equals(lab2)) {
+            throw new LabValidationException();
+        }
     }
 }
