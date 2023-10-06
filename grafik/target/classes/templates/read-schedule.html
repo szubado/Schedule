@@ -5,26 +5,25 @@
 </head>
 <body>
 <link rel="stylesheet" href="/read-schedule.css">
+<script src="/read-schedule.js"></script>
 <div th:replace="~{fragments.html :: logo}"></div>
 <div th:replace="~{fragments.html :: menu}"></div>
 <div id="content">
-    <form th:action="read" th:method="post">
+    <form th:action="read" th:method="get">
         <label for="month">Wybierz miesiąc:</label>
         <input type="month" id="month" name="month" min="2024-01" max="2024-12" value="2024-01" >
-        <input th:if="${logged}" type="submit" value="Wyświetl" class="count">
+        <input th:if="${logged}" th:href="@{/schedule/read/{id}(id=${month})}" type="submit" value="Wyświetl" class="count">
     </form>
-    <a th:if="${admin}" th:href="@{/schedule/approve/{id}(id=${month})}" class="count">Akceptuj dyżury</a>
+<!--    <a th:if="${admin}" th:href="@{/schedule/approve/{id}(id=${month})}" class="count" id="btn2">Akceptuj dyżury</a>-->
     <div class="box">
         <div th:each="day : ${days}" class="day">
             <div class="innerbox">
                 <div th:text="${day.date}" class="person"></div>
-                <div th:text="${day.user1.name != null} ? ${day.user1.name} : 'dupa'"></div>
-<!--                <div th:text="${day.user1.surname} ?: 'dupa'"></div>
-                <div th:text="${day.user2.name} ?: 'dupa'"></div>
-                <div th:text="${day.user2.surname} ?: 'dupa'"></div>-->
+                <div th:text="${day.user1 != null} ? ${day.user1.name} : 'EDYTUJ'" class="person"></div>
+                <div th:text="${day.user1 != null} ? ${day.user1.surname} : ''" class="person"></div>
+                <div th:text="${day.user2 != null} ? ${day.user2.name} : 'EDYTUJ'" class="person"></div>
+                <div th:text="${day.user2 != null} ? ${day.user2.surname} : ''" class="person"></div>
             </div>
-<!--        <div th:text="${day.user1.name} + ' ' + {day.user1.surname}" class="person"></div>
-        <div th:text="${day.user2.name} + ' ' + {day.user2.surname}" class="person"></div>-->
         </div>
     </div>
 </div>

@@ -54,24 +54,42 @@ public class ScheduleController {
     }
 
     @RequestMapping(path = "/schedule/read", method = RequestMethod.GET)
-    public String read(Model model) {
+    public String read(Model model, @RequestParam(required = false) String month) {
         if (!this.sessionData.isLogged()) {
             return "redirect:/main";
         }
         ModelUtils.addCommonDataToModel(model, this.sessionData);
-        return "read-schedule";
+        if (month != null) {
+            model.addAttribute("days", this.dayService.findByMonth(Integer.parseInt(month.substring(month.length() - 2))));
+            return "redirect:/schedule/read/"+month;
+        }
+        else {
+            return "read-schedule";
+        }
     }
 
-    @RequestMapping(path = "/schedule/read", method = RequestMethod.POST)
-    public String show(@RequestParam String month, Model model) {
-        if (!this.sessionData.isLogged()) {
+    @RequestMapping(path = "/schedule/read/{month}", method = RequestMethod.GET)
+    public String readMonth(Model model, @PathVariable String month) {
+        if (!this.sessionData.isAdmin()) {
             return "redirect:/main";
         }
+        if (month != null) {
             model.addAttribute("days", this.dayService.findByMonth(Integer.parseInt(month.substring(month.length() - 2))));
-            model.addAttribute("month", (Integer.parseInt(month.substring(month.length() - 2))));
+        }
         ModelUtils.addCommonDataToModel(model, this.sessionData);
-        return "read-schedule";
+        return "read-schedule2";
     }
+
+    /*    @RequestMapping(path = "/schedule/read", method = RequestMethod.POST)
+        public String show(@RequestParam String month, Model model) {
+            if (!this.sessionData.isLogged()) {
+                return "redirect:/main";
+            }
+            model.addAttribute("month", (Integer.parseInt(month.substring(month.length() - 2))));
+            model.addAttribute("days", this.dayService.findByMonth(Integer.parseInt(month.substring(month.length() - 2))));
+            ModelUtils.addCommonDataToModel(model, this.sessionData);
+            return "read-schedule";
+        }*/
 
     @RequestMapping(path = "/schedule/edit", method = RequestMethod.GET)
     public String edit(Model model) {
@@ -103,15 +121,15 @@ public class ScheduleController {
         return "edit-schedule";
     }
 
-    @RequestMapping(path = "/schedule/approve/{id}", method = RequestMethod.GET)
-    public String acceptDuties(@PathVariable int id) {
+    @RequestMapping(path = "/schedule/approve/{month}", method = RequestMethod.GET)
+    public String acceptDuties(@PathVariable String month) {
         if(!this.sessionData.isAdmin()) {
             return "redirect:/main";
         }
-        if (!this.dayService.checkIfFilled(id)) {
+        if (!this.dayService.checkIfFilled(Integer.parseInt(month.substring(month.length() - 2)))) {
             return "redirect:/schedule/edit";
         }
-        this.dayService.acceptDuties(id);
+        this.dayService.acceptDuties(Integer.parseInt(month.substring(month.length() - 2)));
         return "redirect:/schedule/read";
     }
 }
