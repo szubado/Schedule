@@ -14,6 +14,5 @@ public interface DayOffDAO extends CrudRepository<DayOff,Integer> {
     List<DayOff> findByApproved(boolean approved);
     Optional<DayOff> findByDayOfYear(int dayOfYear);
     List<DayOff> findByDayOfYearAndUser(int dayOfYear, User user);
-
-
+    List<DayOff> findByUser(User user);
 }

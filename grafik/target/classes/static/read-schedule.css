@@ -22,3 +22,21 @@ padding: 15px;
 padding: 5px;
 }
 
+.button {
+font-size: 15px;
+margin:5px 25px;
+text-decoration: none;
+border: 2px solid #9400d3;
+border-radius: 15px;
+padding: 5px 10px;
+color: black;
+transition: all 0.5s;
+background-color: #7fffd4;
+}
+
+.button:hover {
+border: 2px solid #87cefa;
+color: black;
+background-color: #ba55d3;
+}
+

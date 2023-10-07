@@ -2,6 +2,7 @@ package it.camp.schedule.services.impl;
 
 import it.camp.schedule.database.DayOffDAO;
 import it.camp.schedule.model.DayOff;
+import it.camp.schedule.model.User;
 import it.camp.schedule.services.IDayOffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,4 +39,13 @@ public class DayOffService implements IDayOffService {
         this.dayOffDAO.save(dayOff);
     }
 
+    @Override
+    public List<DayOff> findApprovedByUser(User user) {
+        return this.dayOffDAO.findByUser(user).stream().filter(DayOff::isApproved).toList();
+    }
+
+    @Override
+    public List<DayOff> findNotApprovedByUser(User user) {
+        return this.dayOffDAO.findByUser(user).stream().filter(d -> !d.isApproved()).toList();
+    }
 }

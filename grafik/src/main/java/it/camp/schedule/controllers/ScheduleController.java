@@ -70,7 +70,7 @@ public class ScheduleController {
 
     @RequestMapping(path = "/schedule/read/{month}", method = RequestMethod.GET)
     public String readMonth(Model model, @PathVariable String month) {
-        if (!this.sessionData.isAdmin()) {
+        if (!this.sessionData.isLogged()) {
             return "redirect:/main";
         }
         if (month != null) {
@@ -79,17 +79,6 @@ public class ScheduleController {
         ModelUtils.addCommonDataToModel(model, this.sessionData);
         return "read-schedule2";
     }
-
-    /*    @RequestMapping(path = "/schedule/read", method = RequestMethod.POST)
-        public String show(@RequestParam String month, Model model) {
-            if (!this.sessionData.isLogged()) {
-                return "redirect:/main";
-            }
-            model.addAttribute("month", (Integer.parseInt(month.substring(month.length() - 2))));
-            model.addAttribute("days", this.dayService.findByMonth(Integer.parseInt(month.substring(month.length() - 2))));
-            ModelUtils.addCommonDataToModel(model, this.sessionData);
-            return "read-schedule";
-        }*/
 
     @RequestMapping(path = "/schedule/edit", method = RequestMethod.GET)
     public String edit(Model model) {
@@ -118,7 +107,7 @@ public class ScheduleController {
         }
         ModelUtils.addCommonDataToModel(model, this.sessionData);
         model.addAttribute("users",this.userService.findAllUsers());
-        return "edit-schedule";
+        return "redirect:/schedule/edit";
     }
 
     @RequestMapping(path = "/schedule/approve/{month}", method = RequestMethod.GET)

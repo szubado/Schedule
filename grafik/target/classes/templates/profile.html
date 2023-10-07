@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:replace="~{fragments.html :: headers}"></th:block>
-  <script src="/login-validator.js"></script>
+    <th:block th:replace="~{fragments.html :: headers}"></th:block>
+    <script src="/login-validator.js"></script>
 </head>
 <body>
+<link rel="stylesheet" href="/profile.css">
 <div th:replace="~{fragments.html :: logo}"></div>
 <div th:replace="~{fragments.html :: menu}"></div>
 <div id="content">
-
+    <div>Dni Wolne zatwerdzone</div>
+    <div th:each="dayOff : ${daysOffA}" class="dayOff">
+        <div th:text="${dayOff.date}" class="person"></div>
+    </div>
+    <div>Dni Wolne niezatwierdzone</div>
+    <div th:each="dayOff : ${daysOffN}" class="dayOff">
+        <div th:text="${dayOff.date}" class="person"></div>
+    </div>
+    <div>Dyżury</div>
+    <div th:each="duty : ${duties}" class="duty">
+        <div th:text="${duty.date}" class="person"></div>
+    </div>
 </div>
 </body>
 </html>

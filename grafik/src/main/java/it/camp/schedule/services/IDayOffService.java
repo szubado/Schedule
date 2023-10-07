@@ -1,6 +1,7 @@
 package it.camp.schedule.services;
 
 import it.camp.schedule.model.DayOff;
+import it.camp.schedule.model.User;
 
 import java.util.Date;
 import java.util.List;
@@ -12,5 +13,9 @@ public interface IDayOffService {
     public Optional<DayOff> findById(int id);
     public void approveDayOff(DayOff dayOff);
     public void saveDayOff(DayOff dayOff);
-    }
+    List<DayOff> findApprovedByUser(User user);
+    List<DayOff> findNotApprovedByUser(User user);
+
+
+}
 

@@ -1,6 +1,7 @@
 package it.camp.schedule.services;
 
 import it.camp.schedule.model.Day;
+import it.camp.schedule.model.User;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface IDayService {
     public int lastDayFilled(int month);
     public void calculate(int month);
     public void saveDay(Day day);
+    public List<Day> findAprvDutiesByUser(int id, User user1, User user2);
 }

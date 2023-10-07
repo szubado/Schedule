@@ -142,4 +142,8 @@ public class DayService implements IDayService {
         this.dayDAO.save(day);
     }
 
+    @Override
+    public List<Day> findAprvDutiesByUser(int id, User user1, User user2) {
+        return this.dayDAO.findByUser1OrUser2(user1, user2).stream().filter(Day::isApproved).toList();
+    }
 }

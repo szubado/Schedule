@@ -3,6 +3,7 @@ package it.camp.schedule.controllers;
 import it.camp.schedule.database.DayOffDAO;
 import it.camp.schedule.model.DayOff;
 import it.camp.schedule.services.IDayOffService;
+import it.camp.schedule.services.IDayService;
 import it.camp.schedule.session.SessionData;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,15 @@ public class ProfileController {
     @Autowired
     IDayOffService dayOffService;
 
+    @Autowired
+    IDayService dayService;
     @RequestMapping(path = "/profile", method = RequestMethod.GET)
     public String login(Model model) {
         ModelUtils.addCommonDataToModel(model, this.sessionData);
+        model.addAttribute("daysOffA", this.dayOffService.findApprovedByUser(sessionData.getUser()));
+        model.addAttribute("daysOffN", this.dayOffService.findNotApprovedByUser(sessionData.getUser()));
+        model.addAttribute("duties", this.dayService
+                .findAprvDutiesByUser(sessionData.getUser().getId(), sessionData.getUser(), sessionData.getUser()));
         return "profile";
     }
 

@@ -8,12 +8,7 @@
 <div th:replace="~{fragments.html :: logo}"></div>
 <div th:replace="~{fragments.html :: menu}"></div>
 <div id="content">
-  <form th:action="read" th:method="get">
-    <label for="month">Wybierz miesiąc:</label>
-    <input type="month" id="month" name="month" min="2024-01" max="2024-12" value="2024-01" >
-    <input th:if="${logged}" th:href="@{/schedule/approve/{id}(id=${month})}" type="submit" value="Wyświetl" class="count">
-  </form>
-  <a th:if="${admin}" th:href="@{/schedule/approve/{id}(id=${month})}" class="count" id="btn2">Akceptuj dyżury</a>
+  <a th:if="${admin}" th:href="@{/schedule/approve/{id}(id=${month})}" class="button" id="btn2">Akceptuj dyżury</a>
   <div class="box">
     <div th:each="day : ${days}" class="day">
       <div class="innerbox">
