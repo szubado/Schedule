@@ -29,6 +29,9 @@ public class ProfileController {
     IDayService dayService;
     @RequestMapping(path = "/profile", method = RequestMethod.GET)
     public String login(Model model) {
+        if (!this.sessionData.isLogged()) {
+            return "redirect:/main";
+        }
         ModelUtils.addCommonDataToModel(model, this.sessionData);
         model.addAttribute("daysOffA", this.dayOffService.findApprovedByUser(sessionData.getUser()));
         model.addAttribute("daysOffN", this.dayOffService.findNotApprovedByUser(sessionData.getUser()));
@@ -39,6 +42,9 @@ public class ProfileController {
 
     @RequestMapping(path = "/dayOff", method = RequestMethod.GET)
     public String dayOff(Model model) {
+        if (!this.sessionData.isLogged()) {
+            return "redirect:/main";
+        }
         model.addAttribute("dayOff", new DayOff());
         ModelUtils.addCommonDataToModel(model, this.sessionData);
         return "dayOff";

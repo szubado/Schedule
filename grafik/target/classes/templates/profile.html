@@ -8,17 +8,20 @@
 <link rel="stylesheet" href="/profile.css">
 <div th:replace="~{fragments.html :: logo}"></div>
 <div th:replace="~{fragments.html :: menu}"></div>
-<div id="content">
-    <div>Dni Wolne zatwerdzone</div>
-    <div th:each="dayOff : ${daysOffA}" class="dayOff">
+<div id="content" class="content">
+    <div class="text">Zatwierdzone dni wolne:</div>
+    <div class="none" th:if="${daysOffA.empty}">BRAK</div>
+    <div th:each="dayOff : ${daysOffA}" class="show">
         <div th:text="${dayOff.date}" class="person"></div>
     </div>
-    <div>Dni Wolne niezatwierdzone</div>
-    <div th:each="dayOff : ${daysOffN}" class="dayOff">
+    <div class="text">Niezatwierdzone dni wolne:</div>
+    <div class="none" th:if="${daysOffN.empty}">BRAK</div>
+    <div th:each="dayOff : ${daysOffN}" class="show">
         <div th:text="${dayOff.date}" class="person"></div>
     </div>
-    <div>Dyżury</div>
-    <div th:each="duty : ${duties}" class="duty">
+    <div class="text">Dyżury:</div>
+    <div class="none" th:if="${duties.empty}">BRAK</div>
+    <div th:each="duty : ${duties}" class="show">
         <div th:text="${duty.date}" class="person"></div>
     </div>
 </div>

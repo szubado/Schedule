@@ -46,8 +46,11 @@ public class ScheduleController {
         if (!this.sessionData.isAdmin()) {
             return "redirect:/main";
         }
-        // jesli nie approved dyzury to redrect na approve
-        //jesli poprzedni mies nie jest approved to return schedule
+        if (!this.dayService.isLastMonthApproved(Integer.parseInt(month.substring(month.length() - 2)))) {
+            return "redirect:/schedule";
+        }
+        model.addAttribute("yesterdayApproved",
+                    this.dayService.isLastMonthApproved(Integer.parseInt(month.substring(month.length() - 2))));
         this.dayService.calculate(Integer.parseInt(month.substring(month.length() -2)));
         ModelUtils.addCommonDataToModel(model, this.sessionData);
         return "schedule";
@@ -74,8 +77,11 @@ public class ScheduleController {
             return "redirect:/main";
         }
         if (month != null) {
-            model.addAttribute("days", this.dayService.findByMonth(Integer.parseInt(month.substring(month.length() - 2))));
+            model.addAttribute("days",
+                    this.dayService.findByMonth(Integer.parseInt(month.substring(month.length() - 2))));
         }
+        model.addAttribute("notApproved",
+                this.dayService.findNotApproved(Integer.parseInt(month.substring(month.length() - 2))));
         ModelUtils.addCommonDataToModel(model, this.sessionData);
         return "read-schedule2";
     }
@@ -101,6 +107,7 @@ public class ScheduleController {
             UserValidator.validateLabEquality(day.getUser1().getLab(), day.getUser2().getLab());
             dayBox.get().setUser1(day.getUser1());
             dayBox.get().setUser2(day.getUser2());
+            dayBox.get().setApproved(false);
             this.dayService.saveDay(dayBox.get());
         } catch (LabValidationException e) {
             return "redirect:/schedule/edit";

@@ -14,4 +14,6 @@ public interface IDayService {
     public void calculate(int month);
     public void saveDay(Day day);
     public List<Day> findAprvDutiesByUser(int id, User user1, User user2);
+    public List<Day> findNotApproved(int month);
+    public boolean isLastMonthApproved(final int month);
 }

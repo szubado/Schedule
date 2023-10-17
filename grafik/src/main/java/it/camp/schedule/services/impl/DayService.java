@@ -22,10 +22,11 @@ public class DayService implements IDayService {
 
     @Override
     public List<Day> findByMonth(final int month) {
-        /*        int newMonth = Integer.parseInt(month.substring(month.length() - 2));*/
         List<Day> days = (List<Day>) this.dayDAO.findAll();
         return days.stream().filter(d -> d.getDate().getMonthValue() == month).toList();
     }
+
+
 
     @Override
     public boolean checkIfFilled(int month) {
@@ -95,7 +96,6 @@ public class DayService implements IDayService {
             List<User> availableUsers = users.stream().filter(u -> u.getId() !=
                     this.dayDAO.findById(previousDay).get().getUser1().getId() &&
                     u.getId() != this.dayDAO.findById(previousDay).get().getUser2().getId()).toList();
-            //opis ifow co robia
             if (this.dayOffDAO.findByDayOfYear(previousDay + 1).isPresent()) {
                 availableUsers = availableUsers.stream().filter(u -> u.getId() !=
                         this.dayOffDAO.findByDayOfYear(previousDay + 1).get().getUser().getId()).toList();
@@ -111,8 +111,6 @@ public class DayService implements IDayService {
                     dayBox.get().setUser1(new User(randomUser1, employee1Lab));
                     availableUsers = availableUsers.stream().filter(u -> !u.getLab().equals(employee1Lab)).toList();
                 } else {
-                    //opis wyjscia
-                    //couter ile razy weszlismy tutaj jesli przekroczy 2xrozmiar tablicy users (wyselekcjonowanej)
                     counter1++;
                     if (counter1 > numberOfEmployees * 2) {
                         break;
@@ -145,5 +143,15 @@ public class DayService implements IDayService {
     @Override
     public List<Day> findAprvDutiesByUser(int id, User user1, User user2) {
         return this.dayDAO.findByUser1OrUser2(user1, user2).stream().filter(Day::isApproved).toList();
+    }
+
+    @Override
+    public List<Day> findNotApproved(int month) {
+        return this.findByMonth(month).stream().filter(d -> !d.isApproved()).toList();
+    }
+
+    @Override
+    public boolean isLastMonthApproved(int month) {
+        return this.dayDAO.findById(this.findByMonth(month).get(1).getId() - 1).get().isApproved();
     }
 }
