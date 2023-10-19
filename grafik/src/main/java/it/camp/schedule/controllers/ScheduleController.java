@@ -2,21 +2,17 @@ package it.camp.schedule.controllers;
 
 import it.camp.schedule.database.DayDAO;
 import it.camp.schedule.exceptions.LabValidationException;
-import it.camp.schedule.exceptions.LoginAlreadyExistsException;
 import it.camp.schedule.model.Day;
-import it.camp.schedule.model.DayOff;
-import it.camp.schedule.model.User;
+import it.camp.schedule.services.IDayOffService;
 import it.camp.schedule.services.IDayService;
 import it.camp.schedule.services.impl.UserService;
 import it.camp.schedule.session.SessionData;
 import it.camp.schedule.validators.UserValidator;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.exceptions.TemplateProcessingException;
 
 import java.util.Optional;
 
@@ -31,6 +27,8 @@ public class ScheduleController {
     DayDAO dayDAO;
     @Autowired
     UserService userService;
+    @Autowired
+    IDayOffService dayOffService;
 
     @RequestMapping(path = "/schedule", method = RequestMethod.GET)
     public String create(Model model) {
@@ -46,12 +44,13 @@ public class ScheduleController {
         if (!this.sessionData.isAdmin()) {
             return "redirect:/main";
         }
-        if (!this.dayService.isLastMonthApproved(Integer.parseInt(month.substring(month.length() - 2)))) {
-            return "redirect:/schedule";
+        if (!this.dayOffService.areDaysOffApproved(dayService.changeToNumber(month)).isEmpty()) {
+            return "redirect:/accept";
         }
-        model.addAttribute("yesterdayApproved",
-                    this.dayService.isLastMonthApproved(Integer.parseInt(month.substring(month.length() - 2))));
-        this.dayService.calculate(Integer.parseInt(month.substring(month.length() -2)));
+        if (!this.dayService.isLastMonthApproved(dayService.changeToNumber(month))) {
+            return "redirect:/schedule/read";
+        }
+        this.dayService.calculate(dayService.changeToNumber(month));
         ModelUtils.addCommonDataToModel(model, this.sessionData);
         return "schedule";
     }
@@ -63,7 +62,7 @@ public class ScheduleController {
         }
         ModelUtils.addCommonDataToModel(model, this.sessionData);
         if (month != null) {
-            model.addAttribute("days", this.dayService.findByMonth(Integer.parseInt(month.substring(month.length() - 2))));
+            model.addAttribute("days", this.dayService.findByMonth(dayService.changeToNumber(month)));
             return "redirect:/schedule/read/"+month;
         }
         else {
@@ -78,10 +77,10 @@ public class ScheduleController {
         }
         if (month != null) {
             model.addAttribute("days",
-                    this.dayService.findByMonth(Integer.parseInt(month.substring(month.length() - 2))));
+                    this.dayService.findByMonth(dayService.changeToNumber(month)));
         }
         model.addAttribute("notApproved",
-                this.dayService.findNotApproved(Integer.parseInt(month.substring(month.length() - 2))));
+                this.dayService.findNotApproved(dayService.changeToNumber(month)));
         ModelUtils.addCommonDataToModel(model, this.sessionData);
         return "read-schedule2";
     }
@@ -103,6 +102,11 @@ public class ScheduleController {
         if (!this.sessionData.isAdmin()) {
             return "redirect:/main";
         }
+        System.out.println(day.getUser1());
+        System.out.println(day.getUser2());
+        if (day.getUser1() == null || day.getUser2() == null) {
+            return "redirect:/schedule/edit";
+        }
         try {
             UserValidator.validateLabEquality(day.getUser1().getLab(), day.getUser2().getLab());
             dayBox.get().setUser1(day.getUser1());
@@ -122,10 +126,10 @@ public class ScheduleController {
         if(!this.sessionData.isAdmin()) {
             return "redirect:/main";
         }
-        if (!this.dayService.checkIfFilled(Integer.parseInt(month.substring(month.length() - 2)))) {
+        if (!this.dayService.checkIfFilled(dayService.changeToNumber(month))) {
             return "redirect:/schedule/edit";
         }
-        this.dayService.acceptDuties(Integer.parseInt(month.substring(month.length() - 2)));
+        this.dayService.acceptDuties(dayService.changeToNumber(month));
         return "redirect:/schedule/read";
     }
 }

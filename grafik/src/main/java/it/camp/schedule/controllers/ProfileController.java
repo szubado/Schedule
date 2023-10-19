@@ -24,7 +24,6 @@ public class ProfileController {
     DayOffDAO dayOffDAO;
     @Autowired
     IDayOffService dayOffService;
-
     @Autowired
     IDayService dayService;
     @RequestMapping(path = "/profile", method = RequestMethod.GET)

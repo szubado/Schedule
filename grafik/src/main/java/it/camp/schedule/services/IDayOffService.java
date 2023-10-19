@@ -11,11 +11,9 @@ public interface IDayOffService {
     public List<DayOff> toAccept();
     public void discardDayOff(int id);
     public Optional<DayOff> findById(int id);
-    public void approveDayOff(DayOff dayOff);
     public void saveDayOff(DayOff dayOff);
     List<DayOff> findApprovedByUser(User user);
     List<DayOff> findNotApprovedByUser(User user);
-
-
+    public List<DayOff> areDaysOffApproved(int month);
 }
 

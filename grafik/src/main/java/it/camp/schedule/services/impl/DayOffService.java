@@ -28,13 +28,6 @@ public class DayOffService implements IDayOffService {
     }
 
     @Override
-    public void approveDayOff(DayOff dayOff) {
-/*
-        this.dayOffDAO.findById(id)
-*/
-    }
-
-    @Override
     public void saveDayOff(DayOff dayOff) {
         this.dayOffDAO.save(dayOff);
     }
@@ -47,5 +40,10 @@ public class DayOffService implements IDayOffService {
     @Override
     public List<DayOff> findNotApprovedByUser(User user) {
         return this.dayOffDAO.findByUser(user).stream().filter(d -> !d.isApproved()).toList();
+    }
+
+    @Override
+    public List<DayOff> areDaysOffApproved(int month) {
+        return this.dayOffDAO.findByApproved(false);
     }
 }

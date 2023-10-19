@@ -23,7 +23,11 @@ public class DayService implements IDayService {
     @Override
     public List<Day> findByMonth(final int month) {
         List<Day> days = (List<Day>) this.dayDAO.findAll();
-        return days.stream().filter(d -> d.getDate().getMonthValue() == month).toList();
+        if (month == 12) {
+            return days.stream().filter(d -> d.getDate().getMonthValue() == month).filter(d -> d.getId() != 0).toList();
+        } else {
+            return days.stream().filter(d -> d.getDate().getMonthValue() == month).toList();
+        }
     }
 
 
@@ -51,8 +55,13 @@ public class DayService implements IDayService {
     @Override
     public List<Day> findTwoClosestMonths(int month) {
         List<Day> days = (List<Day>) this.dayDAO.findAll();
-        return days.stream().filter(d -> d.getDate().getMonthValue() == month ||
-                d.getDate().getMonthValue() == month + 1).toList();
+        if (month == 12) {
+            return days.stream().filter(d -> d.getDate().getMonthValue() == month ||
+                    d.getDate().getMonthValue() == 1).filter(d -> d.getId() > 31).toList();
+        } else {
+            return days.stream().filter(d -> d.getDate().getMonthValue() == month ||
+                    d.getDate().getMonthValue() == month + 1).filter(d -> d.getId() != 0).toList();
+        }
     }
 
     @Override
@@ -152,6 +161,13 @@ public class DayService implements IDayService {
 
     @Override
     public boolean isLastMonthApproved(int month) {
-        return this.dayDAO.findById(this.findByMonth(month).get(1).getId() - 1).get().isApproved();
+        System.out.println(this.dayDAO.findById(this.findByMonth(month).get(0).getId()));
+        System.out.println(this.dayDAO.findById(this.findByMonth(month).get(0).getId() - 1).get().isApproved());
+        return this.dayDAO.findById(this.findByMonth(month).get(0).getId() - 1).get().isApproved();
+    }
+
+    @Override
+    public int changeToNumber(String month) {
+        return Integer.parseInt(month.substring(month.length() - 2));
     }
 }
