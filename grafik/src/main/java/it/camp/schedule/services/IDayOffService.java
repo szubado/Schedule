@@ -15,5 +15,9 @@ public interface IDayOffService {
     List<DayOff> findApprovedByUser(User user);
     List<DayOff> findNotApprovedByUser(User user);
     public List<DayOff> areDaysOffApproved(int month);
+    List<DayOff> findByApproved(boolean approved);
+    Optional<DayOff> findByDayOfYear(int dayOfYear);
+    List<DayOff> findByUser(User user);
+
 }
 

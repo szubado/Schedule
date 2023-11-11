@@ -16,13 +16,15 @@ public class DayOffService implements IDayOffService {
 
     @Override
     public List<DayOff> toAccept() {
-        return dayOffDAO.findByApproved(false);
+        return this.findByApproved(false);
     }
 
     @Override
     public void discardDayOff(int id) {
         this.dayOffDAO.deleteById(id);
     }
+
+    @Override
     public Optional<DayOff> findById(int id) {
         return this.dayOffDAO.findById(id);
     }
@@ -34,16 +36,31 @@ public class DayOffService implements IDayOffService {
 
     @Override
     public List<DayOff> findApprovedByUser(User user) {
-        return this.dayOffDAO.findByUser(user).stream().filter(DayOff::isApproved).toList();
+        return this.findByUser(user).stream().filter(DayOff::isApproved).toList();
     }
 
     @Override
     public List<DayOff> findNotApprovedByUser(User user) {
-        return this.dayOffDAO.findByUser(user).stream().filter(d -> !d.isApproved()).toList();
+        return this.findByUser(user).stream().filter(d -> !d.isApproved()).toList();
     }
 
     @Override
     public List<DayOff> areDaysOffApproved(int month) {
-        return this.dayOffDAO.findByApproved(false);
+        return this.findByApproved(false);
+    }
+
+    @Override
+    public List<DayOff> findByApproved(boolean approved) {
+        return this.dayOffDAO.findByApproved(approved);
+    }
+
+    @Override
+    public Optional<DayOff> findByDayOfYear(int dayOfYear) {
+        return this.dayOffDAO.findByDayOfYear(dayOfYear);
+    }
+
+    @Override
+    public List<DayOff> findByUser(User user) {
+        return this.dayOffDAO.findByUser(user);
     }
 }

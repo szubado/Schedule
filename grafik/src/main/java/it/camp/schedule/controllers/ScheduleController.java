@@ -1,6 +1,5 @@
 package it.camp.schedule.controllers;
 
-import it.camp.schedule.database.DayDAO;
 import it.camp.schedule.exceptions.LabValidationException;
 import it.camp.schedule.model.Day;
 import it.camp.schedule.services.IDayOffService;
@@ -23,8 +22,6 @@ public class ScheduleController {
     SessionData sessionData;
     @Autowired
     IDayService dayService;
-    @Autowired
-    DayDAO dayDAO;
     @Autowired
     UserService userService;
     @Autowired
@@ -98,7 +95,7 @@ public class ScheduleController {
 
     @RequestMapping(path = "/schedule/edit", method = RequestMethod.POST)
     public String editDay(@ModelAttribute Day day, Model model) {
-        Optional<Day> dayBox = this.dayDAO.findById(day.getDate().getDayOfYear());
+        Optional<Day> dayBox = this.dayService.findById(day.getDate().getDayOfYear());
         if (!this.sessionData.isAdmin()) {
             return "redirect:/main";
         }

@@ -18,7 +18,7 @@ public class DayService implements IDayService {
     @Autowired
     UserDAO userDAO;
     @Autowired
-    DayOffDAO dayOffDAO;
+    DayOffService dayOffService;
 
     @Override
     public List<Day> findByMonth(final int month) {
@@ -76,7 +76,7 @@ public class DayService implements IDayService {
     }
 
     public int countNumberOfDuties(int month, User user1, User user2) {
-        List<Day> listOfDuties = this.dayDAO.findByUser1OrUser2(user1, user2).stream()
+        List<Day> listOfDuties = this.findByUser1OrUser2(user1, user2).stream()
                 .filter(d -> d.getDate().getMonthValue() == month).toList();
         return listOfDuties.size();
     }
@@ -98,16 +98,15 @@ public class DayService implements IDayService {
         int maxDuties = (numberOfDays - lastDayFilled(month)) * 2 / numberOfEmployees + 1;
         List<User> users = (List<User>) this.userDAO.findAll();
         int statement = (numberOfEmployees * (((numberOfDays - lastDayFilled(month)) / numberOfEmployees) + 1));
-        // lub -> przpadek grudniowy do kiedy ma sie krecic petla
         outerloop:
         while (day <= statement) {
             final int previousDay = findNbOfDayInYear(month, day - 1);
             List<User> availableUsers = users.stream().filter(u -> u.getId() !=
                     this.dayDAO.findById(previousDay).get().getUser1().getId() &&
                     u.getId() != this.dayDAO.findById(previousDay).get().getUser2().getId()).toList();
-            if (this.dayOffDAO.findByDayOfYear(previousDay + 1).isPresent()) {
+            if (this.dayOffService.findByDayOfYear(previousDay + 1).isPresent()) {
                 availableUsers = availableUsers.stream().filter(u -> u.getId() !=
-                        this.dayOffDAO.findByDayOfYear(previousDay + 1).get().getUser().getId()).toList();
+                        this.dayOffService.findByDayOfYear(previousDay + 1).get().getUser().getId()).toList();
             }
             int counter1 = 0;
             int counter2 = 0;
@@ -151,7 +150,7 @@ public class DayService implements IDayService {
 
     @Override
     public List<Day> findAprvDutiesByUser(int id, User user1, User user2) {
-        return this.dayDAO.findByUser1OrUser2(user1, user2).stream().filter(Day::isApproved).toList();
+        return this.findByUser1OrUser2(user1, user2).stream().filter(Day::isApproved).toList();
     }
 
     @Override
@@ -169,5 +168,15 @@ public class DayService implements IDayService {
     @Override
     public int changeToNumber(String month) {
         return Integer.parseInt(month.substring(month.length() - 2));
+    }
+
+    @Override
+    public List<Day> findByUser1OrUser2(User user1, User user2) {
+        return this.dayDAO.findByUser1OrUser2(user1, user2);
+    }
+
+    @Override
+    public Optional<Day> findById(int id) {
+        return this.dayDAO.findById(id);
     }
 }

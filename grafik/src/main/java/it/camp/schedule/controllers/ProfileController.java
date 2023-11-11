@@ -21,8 +21,6 @@ public class ProfileController {
     @Resource
     SessionData sessionData;
     @Autowired
-    DayOffDAO dayOffDAO;
-    @Autowired
     IDayOffService dayOffService;
     @Autowired
     IDayService dayService;
@@ -83,7 +81,7 @@ public class ProfileController {
 
     @RequestMapping(path = "/accept/approve/{id}", method = RequestMethod.GET)
     public String approveDayOff(@PathVariable int id) {
-        Optional<DayOff> dayOffBox = this.dayOffDAO.findById(id);
+        Optional<DayOff> dayOffBox = this.dayOffService.findById(id);
         if(!this.sessionData.isAdmin() || dayOffBox.isEmpty()) {
             return "redirect:/main";
         }

@@ -9,9 +9,6 @@ import java.time.LocalDate;
 import java.util.List;
 @Repository
 public interface DayDAO extends CrudRepository<Day,Integer> {
-
-    Integer countByDate(LocalDate date);
-    Integer countByUser1OrUser2(User user1, User user2);
     List<Day> findByUser1OrUser2(User user1, User user2);
 
 }
