@@ -12,12 +12,12 @@ public interface IDayOffService {
     public void discardDayOff(int id);
     public Optional<DayOff> findById(int id);
     public void saveDayOff(DayOff dayOff);
-    List<DayOff> findApprovedByUser(User user);
-    List<DayOff> findNotApprovedByUser(User user);
+    public List<DayOff> findApprovedByUser(User user);
+    public List<DayOff> findNotApprovedByUser(User user);
     public List<DayOff> areDaysOffApproved(int month);
-    List<DayOff> findByApproved(boolean approved);
-    Optional<DayOff> findByDayOfYear(int dayOfYear);
-    List<DayOff> findByUser(User user);
+    public List<DayOff> findByApproved(boolean approved);
+    public Optional<DayOff> findByDayOfYear(int dayOfYear);
+    public List<DayOff> findByUser(User user);
 
 }
 
