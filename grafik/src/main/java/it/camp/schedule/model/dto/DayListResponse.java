@@ -9,5 +9,5 @@ import java.util.List;
 @Getter
 @RequiredArgsConstructor
 public class DayListResponse {
-    private final List<Day> dayList;
+    private final List<DayDTO> dayList;
 }

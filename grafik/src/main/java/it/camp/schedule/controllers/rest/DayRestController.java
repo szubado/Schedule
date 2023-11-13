@@ -1,15 +1,12 @@
 package it.camp.schedule.controllers.rest;
 
-import com.mysql.cj.x.protobuf.Mysqlx;
 import it.camp.schedule.model.Day;
-import it.camp.schedule.model.DayOff;
+import it.camp.schedule.model.dto.DayDTO;
 import it.camp.schedule.model.dto.DayListResponse;
 import it.camp.schedule.services.IDayService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
@@ -21,7 +18,8 @@ public class DayRestController {
     IDayService dayService;
     @RequestMapping(path = "/month", method = RequestMethod.GET)
     public DayListResponse findDaysByMonth(@RequestParam int month) {
-        return new DayListResponse(this.dayService.findByMonth(month));
+        return new DayListResponse(this.dayService.findByMonth(month).stream()
+                .map(DayDTO::new).toList());
     }
 
     @RequestMapping(path = "/accept/{month}", method = RequestMethod.PUT)
@@ -31,10 +29,10 @@ public class DayRestController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Day> findDayById(@PathVariable int id) {
+    public ResponseEntity<DayDTO> findDayById(@PathVariable int id) {
         Optional<Day> dayBox = this.dayService.findById(id);
-        return dayBox.map(day -> ResponseEntity.status(OK).body(day))
-                .orElseGet(() -> ResponseEntity.status(NOT_FOUND).build());
+        return dayBox.map(day -> ResponseEntity.ok(new DayDTO(day)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @RequestMapping(method = RequestMethod.POST)
