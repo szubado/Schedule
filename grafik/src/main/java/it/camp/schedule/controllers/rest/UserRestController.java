@@ -2,7 +2,7 @@ package it.camp.schedule.controllers.rest;
 
 import it.camp.schedule.exceptions.LoginAlreadyExistsException;
 import it.camp.schedule.model.User;
-import it.camp.schedule.model.dto.UserListResponse;
+import it.camp.schedule.model.dto.ListResponse;
 import it.camp.schedule.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +27,8 @@ public class UserRestController {
     }
 
     @RequestMapping(path = "/all", method = RequestMethod.GET)
-    public UserListResponse findAll() {
-            return new UserListResponse(this.userService.findAllUsers());
+    public ListResponse<User> findAll() {
+            return new ListResponse<>(this.userService.findAllUsers());
     }
 
     @RequestMapping(path = "", method = RequestMethod.POST)

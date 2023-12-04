@@ -2,15 +2,13 @@ package it.camp.schedule.controllers.rest;
 
 import it.camp.schedule.model.DayOff;
 import it.camp.schedule.model.User;
-import it.camp.schedule.model.dto.DayDTO;
 import it.camp.schedule.model.dto.DayOffDTO;
-import it.camp.schedule.model.dto.DayOffListResponse;
+import it.camp.schedule.model.dto.ListResponse;
 import it.camp.schedule.services.IDayOffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
@@ -22,21 +20,24 @@ public class DayOffRestController {
     IDayOffService dayOffService;
 
     @RequestMapping(path = "/toApprove", method = RequestMethod.GET)
-    public DayOffListResponse findNotAppByUser(@RequestBody(required = false) User user) {
+    public ListResponse<DayOffDTO> findNotAppByUser(@RequestBody(required = false) User user) {
         if (user == null) {
-            return new DayOffListResponse(this.dayOffService.toAccept().stream().map(DayOffDTO::new).toList());
+            return new ListResponse<>(this.dayOffService.toAccept().stream()
+                    .map(DayOffDTO::new).toList());
         } else {
-            return new DayOffListResponse(this.dayOffService.findNotApprovedByUser(user).stream()
+            return new ListResponse<>(this.dayOffService.findNotApprovedByUser(user).stream()
                     .map(DayOffDTO::new).toList());
         }
     }
 
     @RequestMapping(path = "/approved", method = RequestMethod.GET)
-    public DayOffListResponse findAppByUser(@RequestBody(required = false) User user) {
+    public ListResponse<DayOffDTO> findAppByUser(@RequestBody(required = false) User user) {
         if (user == null) {
-            return new DayOffListResponse(this.dayOffService.findByApproved(true).stream().map(DayOffDTO::new).toList());
+            return new ListResponse<>(this.dayOffService.findByApproved(true).stream()
+                    .map(DayOffDTO::new).toList());
         } else {
-            return new DayOffListResponse(this.dayOffService.findApprovedByUser(user).stream().map(DayOffDTO::new).toList());
+            return new ListResponse<>(this.dayOffService.findApprovedByUser(user).stream()
+                    .map(DayOffDTO::new).toList());
         }
     }
 
@@ -60,8 +61,8 @@ public class DayOffRestController {
     }
 
     @RequestMapping(path = "/approved/{month}", method = RequestMethod.GET)
-    public DayOffListResponse findDaysOffNotAppInMonth(@PathVariable int month) {
-        return new DayOffListResponse(this.dayOffService.areDaysOffApproved(month).stream()
+    public ListResponse<DayOffDTO> findDaysOffNotAppInMonth(@PathVariable int month) {
+        return new ListResponse<>(this.dayOffService.areDaysOffApproved(month).stream()
                 .map(DayOffDTO::new).toList());
     }
 }

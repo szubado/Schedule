@@ -32,9 +32,6 @@ public class AuthenticationService implements IAuthenticationService {
 
     @Override
     public void register(User user) throws LoginAlreadyExistsException {
-      /*  if (this.userService.findByLogin(user.getLogin()).isPresent()) {
-            throw new LoginAlreadyExistsException();
-        }*/
         user.setPassword(DigestUtils.md5Hex((user.getPassword())));
         user.setRole(User.Role.USER);
         this.userService.save(user);

@@ -1,8 +1,10 @@
 package it.camp.schedule.controllers.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import it.camp.schedule.model.Day;
 import it.camp.schedule.model.dto.DayDTO;
-import it.camp.schedule.model.dto.DayListResponse;
+import it.camp.schedule.model.dto.ListResponse;
 import it.camp.schedule.services.IDayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +18,11 @@ import static org.springframework.http.HttpStatus.*;
 public class DayRestController {
     @Autowired
     IDayService dayService;
+    @Operation(description = "Endpoint issuing list of days in a month", summary = "findDaysByMonth")
     @RequestMapping(path = "/month", method = RequestMethod.GET)
-    public DayListResponse findDaysByMonth(@RequestParam int month) {
-        return new DayListResponse(this.dayService.findByMonth(month).stream()
+    public ListResponse<DayDTO> findDaysByMonth(@Parameter(example = "month", description = "Month in which you are looking for days")
+                                               @RequestParam int month) {
+        return new ListResponse<>(this.dayService.findByMonth(month).stream()
                 .map(DayDTO::new).toList());
     }
 
